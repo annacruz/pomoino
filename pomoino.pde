@@ -1,64 +1,84 @@
-/*
-  File: pomoino.pde
-  Author: Ronald Andreu Kaiser
-  Creation date: 2010-01-16
-  Description: pomodoro technique implementation for arduino.
-  For more information about the technique, visit http://www.pomodorotechnique.com/
-  Material: Arduino, 2 leds, and a buzzer (of course, a resistor for each component).
-  How to use: set the time in minutes for your task/rest and
-  upload to your arduino, changing the pin numbers properly.
-*/
-
-
-int buzzerPin = 10;
+int bluePin = 9;
+int greenPin = 10;
 int redPin = 11;
-int greenPin = 12;
+int buzzerPin = 8;
 
 
-void setup()   
-{                
-  pinMode(buzzerPin, OUTPUT);
-  pinMode(greenPin, OUTPUT);
-  pinMode(redPin, OUTPUT);
+void setup(){
+pinMode(redPin, OUTPUT);
+pinMode(greenPin, OUTPUT);
+pinMode(bluePin, OUTPUT);
+pinMode(buzzerPin, OUTPUT);
 }
 
-void stopWarning()
-{
+void setColor(int redVal, int greenVal, int blueVal){
+analogWrite(redPin, redVal);
+analogWrite(greenPin, greenVal);
+analogWrite(bluePin, blueVal);
+}
+
+void stopWarning(){
   tone(buzzerPin, 220, 2000);
   delay(2000);
 }
 
+void startMusic(){
+  tone(buzzerPin, 261);
+  delay(50);
+  tone(buzzerPin, 293);
+  delay(50);
+  tone(buzzerPin, 329);
+  delay(50);
+  tone(buzzerPin, 349);
+  delay(50);
+  tone(buzzerPin, 392);
+  delay(50);
+  tone(buzzerPin, 440);
+  delay(50);
+  tone(buzzerPin, 493, 500);
+}
 
-void startTaskTime(int minutes)
-{
-  digitalWrite(redPin, HIGH);
-  int seconds = minutes * 60;
-  int cycles = seconds / 2;
-  for(int i = 1; i <= cycles; i++)
-  {
-    if(i % 5 == 0) //toggle lights on/off redPin in 10 seconds
-      digitalRead(redPin) ? digitalWrite(redPin, LOW) : digitalWrite(redPin, HIGH);
-    digitalWrite(buzzerPin, HIGH);
-    delay(1000);
-    digitalWrite(buzzerPin, LOW);
-    delay(1000);
+void stopMusic(){
+  tone(buzzerPin, 493);
+  delay(50);
+  tone(buzzerPin, 440);
+  delay(50);
+  tone(buzzerPin, 392);
+  delay(50);
+  tone(buzzerPin, 349);
+  delay(50);
+  tone(buzzerPin, 329);
+  delay(50);
+  tone(buzzerPin, 293);
+  delay(50);
+  tone(buzzerPin, 261, 500);
+}
+
+void ticTac(int minutes){
+  int miliseconds = minutes * 1000)
+  for (int i =0; i < miliseconds; i++){
+  tone(buzzerPin, 130);
+  delay(50)
+  tone(buzzerPin, 260);
   }
-  digitalWrite(redPin, LOW);  
 }
 
-
-void startRestTime(int minutes)
-{
-  digitalWrite(greenPin, HIGH);
-  delay(minutes*60000);
-  digitalWrite(greenPin, LOW);
+void startTaskTime(int minutes){
+  setColor(255,0,0);
+  int miliseconds = minutes * 1000;
+  delay(miliseconds);
 }
 
-
-void loop()
-{ 
-  startTaskTime(25); // set your task time in minutes
-  stopWarning();
-  startRestTime(5); // set your rest time in minutes
-  stopWarning();
+void startRestTime(int minutes){
+  setColor(0,255,0);
+  int miliseconds = minutes * 1000;
+  delay(miliseconds);
 }
+
+void loop(){
+startTaskTime(1);
+stopMusic();
+startRestTime(1);
+startMusic();
+}
+
